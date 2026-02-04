@@ -3,103 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Question for You ❤️</title>
+    <title>A Special Proposal</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary-pink: #ff4d6d;
-            --soft-pink: #ffeef2;
-            --dark-pink: #d63384;
+            --accent: #ff2a6d;
+            --bg: #fff5f7;
+            --text: #2d3436;
         }
 
         body {
             margin: 0;
-            padding: 0;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: var(--soft-pink);
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Prevents scrollbars when buttons move */
+            background-color: var(--bg);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
         }
 
-        .card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+        .container {
             text-align: center;
-            max-width: 400px;
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             width: 90%;
-            z-index: 10;
-            transition: all 0.3s ease;
+            max-width: 450px;
+            transition: all 0.4s ease;
         }
 
-        .media-container img {
+        .image-box img {
             width: 100%;
-            max-width: 250px;
-            border-radius: 20px;
+            max-width: 200px;
+            border-radius: 15px;
             margin-bottom: 20px;
         }
 
         h1 {
-            color: var(--dark-pink);
+            color: var(--text);
             font-size: 1.8rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.3;
         }
 
-        .btn-group {
+        .btn-wrapper {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             gap: 20px;
-            min-height: 150px; /* Space for the growing button */
+            min-height: 100px;
+            position: relative;
         }
 
         button {
-            padding: 12px 28px;
-            font-size: 1.1rem;
+            padding: 12px 32px;
+            font-size: 1rem;
             font-weight: 600;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s ease, font-size 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #yesBtn {
-            background-color: var(--primary-pink);
+            background-color: var(--accent);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            z-index: 100;
+            z-index: 999;
         }
 
         #noBtn {
-            background-color: #e9ecef;
-            color: #6c757d;
-            position: absolute; /* Needed for the movement script */
-        }
-
-        .success-msg {
-            display: none;
-        }
-
-        /* Responsive Tweaks */
-        @media (max-width: 480px) {
-            h1 { font-size: 1.5rem; }
+            background-color: #f1f2f6;
+            color: #57606f;
+            position: relative; /* Changed from absolute to keep it visible at start */
         }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainCard">
-        <div class="media-container">
-            <img id="displayImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN96/giphy.gif" alt="Mood">
+    <div class="container" id="card">
+        <div class="image-box">
+            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN96/giphy.gif" alt="proposal">
         </div>
         
-        <h1 id="questionText">Will you be my Valentine? 🌹</h1>
-        
-        <div class="btn-group">
-            <button id="yesBtn">Yes!</button>
+        <h1 id="question">Will you be my Valentine? 🌹</h1>
+
+        <div class="btn-wrapper">
+            <button id="yesBtn">Yes, I'd love to!</button>
+            
             <button id="noBtn">No</button>
         </div>
     </div>
@@ -107,48 +99,38 @@
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const mainCard = document.getElementById('mainCard');
-        const displayImg = document.getElementById('displayImg');
-        const questionText = document.getElementById('questionText');
-
+        const question = document.getElementById('question');
+        const mainGif = document.getElementById('mainGif');
+        
         let scale = 1;
-        let fontSize = 1.1;
 
-        // Function to move "No" and grow "Yes"
-        const moveButton = () => {
-            // Move No Button
+        const moveNo = () => {
+            // Make button absolute only after the first interaction
+            noBtn.style.position = 'absolute';
+            
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
 
-            // Grow Yes Button
-            scale += 0.15;
-            fontSize += 0.1;
+            // Make "Yes" button grow
+            scale += 0.4;
             yesBtn.style.transform = `scale(${scale})`;
-            yesBtn.style.fontSize = `${fontSize}rem`;
         };
 
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            moveButton();
-        });
+        noBtn.addEventListener('mouseover', moveNo);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
 
-        // Success State
         yesBtn.addEventListener('click', () => {
-            // Add a transition to the card
-            mainCard.style.transform = "scale(0)";
+            // LINE 114: EDIT SUCCESS MESSAGE HERE
+            question.innerHTML = "Best decision ever! See you soon! ❤️";
             
-            setTimeout(() => {
-                displayImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
-                questionText.innerHTML = "I knew you couldn't resist! ❤️<br><span style='font-size: 1rem; color: #666;'>See you on the 14th!</span>";
-                yesBtn.style.display = "none";
-                noBtn.style.display = "none";
-                mainCard.style.transform = "scale(1)";
-                
-                // Optional: Launch confetti if you want to add a library like canvas-confetti
-            }, 300);
+            // LINE 117: EDIT SUCCESS IMAGE HERE
+            mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
+            
+            noBtn.style.display = 'none';
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         });
     </script>
 </body>
