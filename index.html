@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question for You ❤️</title>
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ffeef2;
+            --dark-pink: #d63384;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--soft-pink);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevents scrollbars when buttons move */
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .media-container img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--dark-pink);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            min-height: 150px; /* Space for the growing button */
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, font-size 0.2s ease;
+        }
+
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            z-index: 100;
+        }
+
+        #noBtn {
+            background-color: #e9ecef;
+            color: #6c757d;
+            position: absolute; /* Needed for the movement script */
+        }
+
+        .success-msg {
+            display: none;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <div class="media-container">
+            <img id="displayImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN96/giphy.gif" alt="Mood">
+        </div>
+        
+        <h1 id="questionText">Will you be my Valentine? 🌹</h1>
+        
+        <div class="btn-group">
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainCard = document.getElementById('mainCard');
+        const displayImg = document.getElementById('displayImg');
+        const questionText = document.getElementById('questionText');
+
+        let scale = 1;
+        let fontSize = 1.1;
+
+        // Function to move "No" and grow "Yes"
+        const moveButton = () => {
+            // Move No Button
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+
+            // Grow Yes Button
+            scale += 0.15;
+            fontSize += 0.1;
+            yesBtn.style.transform = `scale(${scale})`;
+            yesBtn.style.fontSize = `${fontSize}rem`;
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Success State
+        yesBtn.addEventListener('click', () => {
+            // Add a transition to the card
+            mainCard.style.transform = "scale(0)";
+            
+            setTimeout(() => {
+                displayImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
+                questionText.innerHTML = "I knew you couldn't resist! ❤️<br><span style='font-size: 1rem; color: #666;'>See you on the 14th!</span>";
+                yesBtn.style.display = "none";
+                noBtn.style.display = "none";
+                mainCard.style.transform = "scale(1)";
+                
+                // Optional: Launch confetti if you want to add a library like canvas-confetti
+            }, 300);
+        });
+    </script>
+</body>
+</html>
