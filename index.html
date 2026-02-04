@@ -56,7 +56,8 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            min-height: 80px;
+            margin-top: 30px; /* Separates buttons from text */
+            min-height: 150px; /* Created area for the growing button */
         }
 
         button {
@@ -74,13 +75,18 @@
             background: var(--primary);
             color: white;
             box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
-            z-index: 1000; /* Stays on top */
+            z-index: 1000;
         }
 
         #noBtn {
             background: #eee;
             color: #666;
             transition: left 0.2s ease, top 0.2s ease;
+        }
+
+        /* Added to hide buttons on success */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -102,29 +108,27 @@
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const card = document.getElementById('card');
         const mainGif = document.getElementById('mainGif');
         const questionText = document.getElementById('questionText');
 
         let scale = 1;
 
         const moveNo = () => {
-            // Switch to fixed so it can move anywhere on screen
             noBtn.style.position = 'fixed';
             
-            // Calculate random coordinates
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
 
-            // Increase Yes button size
-            scale += 0.5;
-            yesBtn.style.transform = `scale(${scale})`;
+            // Growing logic with cap to avoid covering text
+            if (scale < 3.5) { 
+                scale += 0.4;
+                yesBtn.style.transform = `scale(${scale})`;
+            }
         };
 
-        // Desktop and Mobile support
         noBtn.addEventListener('mouseover', moveNo);
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
@@ -132,15 +136,16 @@
         });
 
         yesBtn.addEventListener('click', () => {
-            // PERSONALIZATION: Change Line 126 Message
+            // PERSONALIZATION: EDIT SUCCESS TEXT BELOW
             questionText.innerHTML = "See you on the 14th! ❤️";
             
-            // PERSONALIZATION: Change Line 129 Success GIF
+            // PERSONALIZATION: EDIT SUCCESS IMAGE BELOW
             mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
             
-            noBtn.style.display = 'none';
+            // Hide everything properly
+            yesBtn.classList.add('hidden');
+            noBtn.classList.add('hidden');
             
-            // Fire Confetti
             confetti({
                 particleCount: 150,
                 spread: 70,
