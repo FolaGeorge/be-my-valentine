@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -21,7 +21,7 @@
             justify-content: center;
             height: 100vh;
             background: #fffafa;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Cinzel', serif; /* Updated to Cinzel */
             overflow: hidden;
         }
 
@@ -45,10 +45,11 @@
 
         h1 {
             color: var(--dark);
-            font-weight: 800;
-            font-size: 1.8rem;
+            font-weight: 400; /* Light Cinzel */
+            font-size: 1.6rem;
             margin-bottom: 30px;
-            line-height: 1.2;
+            line-height: 1.4;
+            letter-spacing: 1px;
         }
 
         .btn-wrapper {
@@ -56,19 +57,20 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            margin-top: 30px; /* Separates buttons from text */
-            min-height: 150px; /* Created area for the growing button */
+            margin-top: 30px; 
+            min-height: 150px; 
         }
 
         button {
             padding: 16px 36px;
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 400;
             border-radius: 16px;
             border: none;
             cursor: pointer;
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
         }
 
         #yesBtn {
@@ -84,7 +86,6 @@
             transition: left 0.2s ease, top 0.2s ease;
         }
 
-        /* Added to hide buttons on success */
         .hidden {
             display: none !important;
         }
@@ -94,10 +95,10 @@
 
     <div class="card" id="card">
         <div class="img-container">
-            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN96/giphy.gif" alt="Mood">
+            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/qUIm5wu6LAAog/giphy.gif" alt="Please?">
         </div>
         
-        <h1 id="questionText"> Hello My Cupcake. Will you be my Valentine? 🌹</h1>
+        <h1 id="questionText">Will you be my Valentine? 🌹</h1>
 
         <div class="btn-wrapper">
             <button id="yesBtn">Yes!</button>
@@ -122,9 +123,8 @@
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
 
-            // Growing logic with cap to avoid covering text
-            if (scale < 3.5) { 
-                scale += 0.4;
+            if (scale < 3) { 
+                scale += 0.35;
                 yesBtn.style.transform = `scale(${scale})`;
             }
         };
@@ -136,13 +136,10 @@
         });
 
         yesBtn.addEventListener('click', () => {
-            // PERSONALIZATION: EDIT SUCCESS TEXT BELOW
-            questionText.innerHTML = "See you on the 14th! ❤️";
+            questionText.innerHTML = "I knew you would say yes! ❤️";
             
-            // PERSONALIZATION: EDIT SUCCESS IMAGE BELOW
             mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
             
-            // Hide everything properly
             yesBtn.classList.add('hidden');
             noBtn.classList.add('hidden');
             
