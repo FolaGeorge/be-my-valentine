@@ -10,7 +10,6 @@
         :root {
             --primary: #ff3366;
             --dark: #2d3436;
-            --light: #f9f9f9;
         }
 
         body {
@@ -19,10 +18,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             background: #fffafa;
-            font-family: 'Cinzel', serif; /* Updated to Cinzel */
-            overflow: hidden;
+            font-family: 'Cinzel', serif;
+            overflow-x: hidden;
         }
 
         .card {
@@ -32,8 +31,9 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.08);
             text-align: center;
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             z-index: 10;
+            transition: all 0.5s ease;
         }
 
         .img-container img {
@@ -45,11 +45,20 @@
 
         h1 {
             color: var(--dark);
-            font-weight: 400; /* Light Cinzel */
+            font-weight: 400;
             font-size: 1.6rem;
-            margin-bottom: 30px;
             line-height: 1.4;
             letter-spacing: 1px;
+        }
+
+        /* Typewriter Styling */
+        #typewriter {
+            font-size: 1.1rem;
+            color: var(--dark);
+            line-height: 1.8;
+            text-align: left;
+            margin-top: 20px;
+            min-height: 100px;
         }
 
         .btn-wrapper {
@@ -73,34 +82,34 @@
             letter-spacing: 1px;
         }
 
-        #yesBtn {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
-            z-index: 1000;
-        }
+        #yesBtn { background: var(--primary); color: white; z-index: 1000; }
+        #noBtn { background: #eee; color: #666; transition: left 0.2s ease, top 0.2s ease; }
 
-        #noBtn {
-            background: #eee;
-            color: #666;
-            transition: left 0.2s ease, top 0.2s ease;
+        .hidden { display: none !important; }
+        
+        /* Cursor animation */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: var(--primary);
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
         }
-
-        .hidden {
-            display: none !important;
-        }
+        @keyframes blink { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div class="card" id="card">
-        <div class="img-container">
+        <div class="img-container" id="mediaSection">
             <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/qUIm5wu6LAAog/giphy.gif" alt="Please?">
         </div>
         
-        <h1 id="questionText"> Hello My Cupacke! Will you be my Valentine?🌹</h1>
+        <h1 id="questionText"> Hi My Cupcake! Will you be my Valentine?🌹</h1>
+        
+        <div id="typewriter"></div>
 
-        <div class="btn-wrapper">
+        <div class="btn-wrapper" id="buttonSection">
             <button id="yesBtn">Yes!</button>
             <button id="noBtn">No</button>
         </div>
@@ -111,18 +120,23 @@
         const yesBtn = document.getElementById('yesBtn');
         const mainGif = document.getElementById('mainGif');
         const questionText = document.getElementById('questionText');
+        const typewriterElement = document.getElementById('typewriter');
+
+        // EDIT YOUR CUSTOM PARAGRAPHS HERE
+        const message = `I am so glad you said yes. 
+
+I do not want to ever get used to the feeling of loving you. 
+I want to look at you everyday and feel a fresh wave of renewed love, a love for you as new as the day itself. Will take efforts, but trust I'll put in the work for your sake my woman. 
+So thank you for being my Valentine again this year. ❤️`;
 
         let scale = 1;
 
         const moveNo = () => {
             noBtn.style.position = 'fixed';
-            
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
-
             if (scale < 3) { 
                 scale += 0.35;
                 yesBtn.style.transform = `scale(${scale})`;
@@ -130,18 +144,29 @@
         };
 
         noBtn.addEventListener('mouseover', moveNo);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            moveNo();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+
+        // Typewriter Engine
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                typewriterElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
+                setTimeout(function() {
+                    typeWriter(text, i + 1, fnCallback)
+                }, 50); // Speed of typing
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 700);
+            }
+        }
 
         yesBtn.addEventListener('click', () => {
-            questionText.innerHTML = "I knew you would say yes! ❤️";
-            
+            // Success State
+            questionText.innerHTML = "My Forever Valentine";
             mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
             
-            yesBtn.classList.add('hidden');
-            noBtn.classList.add('hidden');
+            document.getElementById('buttonSection').classList.add('hidden');
+            
+            // Start the typewriter effect
+            typeWriter(message, 0);
             
             confetti({
                 particleCount: 150,
