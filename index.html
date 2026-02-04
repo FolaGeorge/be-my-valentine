@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff3366;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #fffafa;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+        }
+
+        .img-container img {
+            width: 100%;
+            max-width: 220px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            color: var(--dark);
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .btn-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 16px 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #yesBtn {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
+            z-index: 1000; /* Stays on top */
+        }
+
+        #noBtn {
+            background: #eee;
+            color: #666;
+            transition: left 0.2s ease, top 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="card">
+        <div class="img-container">
+            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN96/giphy.gif" alt="Mood">
+        </div>
+        
+        <h1 id="questionText">Will you be my Valentine? 🌹</h1>
+
+        <div class="btn-wrapper">
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const card = document.getElementById('card');
+        const mainGif = document.getElementById('mainGif');
+        const questionText = document.getElementById('questionText');
+
+        let scale = 1;
+
+        const moveNo = () => {
+            // Switch to fixed so it can move anywhere on screen
+            noBtn.style.position = 'fixed';
+            
+            // Calculate random coordinates
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+
+            // Increase Yes button size
+            scale += 0.5;
+            yesBtn.style.transform = `scale(${scale})`;
+        };
+
+        // Desktop and Mobile support
+        noBtn.addEventListener('mouseover', moveNo);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNo();
+        });
+
+        yesBtn.addEventListener('click', () => {
+            // PERSONALIZATION: Change Line 126 Message
+            questionText.innerHTML = "See you on the 14th! ❤️";
+            
+            // PERSONALIZATION: Change Line 129 Success GIF
+            mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96Ym96JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif";
+            
+            noBtn.style.display = 'none';
+            
+            // Fire Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff3366', '#ffffff']
+            });
+        });
+    </script>
+</body>
+</html>
